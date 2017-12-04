@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-Models for user blog, comment.
+Models for user, blog, comment.
 '''
 
 __author__ = 'Michael Liao'
@@ -49,5 +49,5 @@ class Comment(Model):
 	user_id = StringField(ddl='varchar(50)')
 	user_name = StringField(ddl='varchar(50)')
 	user_image = StringField(ddl='varchar(500)')
-	context = TextField()
+	content = TextField()
 	created_at  = FloatField(default=time.time)

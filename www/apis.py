@@ -22,7 +22,7 @@ class APIError(Exception):
 
 class APIValueError(APIError):
 	'''
-	Indicat the input value has error or invalid. The data specifies the error field of input form.
+	Indicate the input value has error or invalid. The data specifies the error field of input form.
 	'''
 	def __init__(self, field, message=''):
 		super(APIValueError, self).__init__('value:invalid', field, message)

@@ -52,7 +52,7 @@ def get_named_kw_args(fn):
 	params = inspect.signature(fn).parameters
 	for name, param in params.items():
 		if param.kind == inspect.Parameter.KEYWORD_ONLY:
-			apgs.append(name)
+			args.append(name)
 	return tuple(args)
 
 
@@ -154,7 +154,7 @@ def add_route(app, fn):
 	method = getattr(fn, '__method__', None)
 	path = getattr(fn, '__route__', None)
 	if path is None or method is None:
-		raise ValueError('@get or @post not defined is %s.' % str(fn))
+		raise ValueError('@get or @post not defined in %s.' % str(fn))
 	if not asyncio.iscoroutinefunction(fn) and not inspect.isgeneratorfunction(fn):
 		fn = asyncio.coroutine(fn)
 	logging.info('add route %s %s => %s(%s)' % (method, path, fn.__name__, ', '.join(inspect.signature(fn).parameters.keys())))

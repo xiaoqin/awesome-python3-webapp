@@ -39,10 +39,10 @@ def init_jinja2(app, **kw):
 
 
 async def logger_factory(app, handler):
-	async def loger(request):
+	async def logger(request):
 		logging.info('Request: %s %s' % (request.method, request.path))
 		return (await handler(request))
-	return loger
+	return logger
 
 
 async def data_factory(app, handler):
@@ -51,7 +51,7 @@ async def data_factory(app, handler):
 			if request.content_type.startswith('application/json'):
 				request.__data__ = await request.json()
 				logging.info('request json: %s' % str(request.__data__))
-			elif request.content_type.startswith('application/x-www-form-ureload'):
+			elif request.content_type.startswith('application/x-www-form-urlencode'):
 				request.__data__ = await request.post()
 				logging.info('request form: %s' % str(request.__data__))
 		return (await handler(request))
@@ -68,15 +68,15 @@ async def response_factory(app, handler):
 			resp.content_type = 'application/octet-stream'
 			return resp
 		if isinstance(r, str):
-			if r.startswitch('redirect:'):
+			if r.startswith('redirect:'):
 				return web.HTTPFound(r[9:])
 			resp = web.Response(body=r.encode('utf-8'))
-			resp.content_type = 'application/json;charset=utf-8'
+			resp.content_type = 'text/html;charset=utf-8'
 			return resp
 		if isinstance(r, dict):
-			template = r.get('__templating__')
+			template = r.get('__template__')
 			if template is None:
-				resp = web.Response(body=json.dumps(r, ensure_ascii=True, default=lambda o: o.__dict).encode('utf-8'))
+				resp = web.Response(body=json.dumps(r, ensure_ascii=False, default=lambda o: o.__dict__).encode('utf-8'))
 				resp.content_type = 'application/json;charset=utf-8'
 				return resp
 			else:
