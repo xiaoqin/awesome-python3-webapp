@@ -16,7 +16,7 @@ def get(path):
 	Define decorator @get('/path')
 	'''
 	def decorator(func):
-		@functools.wrap(func)
+		@functools.wraps(func)
 		def wrapper(*args, **kw):
 			return func(*args, **kw)
 		wrapper.__method__ = 'GET'
@@ -41,15 +41,15 @@ def post(path):
 
 def get_required_kw_args(fn):
 	args = []
-	params = inspect.signture(fn).parameters
+	params = inspect.signature(fn).parameters
 	for name, param in params.items():
-		if param.kink == inspect.Parameter.KEYWORD_ONLY and param.default == inspect.Parameter.empty:
+		if param.kind == inspect.Parameter.KEYWORD_ONLY and param.default == inspect.Parameter.empty:
 			args.append(name)
 	return tuple(args)
 
 def get_named_kw_args(fn):
 	args = []
-	params = inspect.signture(fn).parameters
+	params = inspect.signature(fn).parameters
 	for name, param in params.items():
 		if param.kind == inspect.Parameter.KEYWORD_ONLY:
 			apgs.append(name)
@@ -57,19 +57,19 @@ def get_named_kw_args(fn):
 
 
 def has_named_kw_args(fn):
-	params = inspect.signture(fn).parameters
+	params = inspect.signature(fn).parameters
 	for name, param in params.items():
 		if param.kind == inspect.Parameter.KEYWORD_ONLY:
 			return True
 
 def has_var_kw_arg(fn):
-	params = inspect.signture(fn).parameters
+	params = inspect.signature(fn).parameters
 	for name, param in params.items():
 		if param.kind == inspect.Parameter.VAR_KEYWORD:
 			return True
 
 def has_request_arg(fn):
-	sig = inspect.signture(fn)
+	sig = inspect.signature(fn)
 	params = sig.parameters
 	found = False
 	for name, param in params.items():
@@ -157,8 +157,8 @@ def add_route(app, fn):
 		raise ValueError('@get or @post not defined is %s.' % str(fn))
 	if not asyncio.iscoroutinefunction(fn) and not inspect.isgeneratorfunction(fn):
 		fn = asyncio.coroutine(fn)
-	logging.info('add route %s %s => %s(%s)' % (method, path, fn.__name__, ', '.join(inspect.signture(fn).parameters.keys())))
-	app.route.add_route(method, path, RequestHandler(app, fn))
+	logging.info('add route %s %s => %s(%s)' % (method, path, fn.__name__, ', '.join(inspect.signature(fn).parameters.keys())))
+	app.router.add_route(method, path, RequestHandler(app, fn))
 
 def add_routes(app, module_name):
 	n = module_name.rfind('.')

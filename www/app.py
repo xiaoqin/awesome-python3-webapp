@@ -42,7 +42,7 @@ async def logger_factory(app, handler):
 	async def loger(request):
 		logging.info('Request: %s %s' % (request.method, request.path))
 		return (await handler(request))
-	return logger
+	return loger
 
 
 async def data_factory(app, handler):
@@ -114,7 +114,7 @@ async def init(loop):
 	app = web.Application(loop=loop, middlewares=[
 		logger_factory, response_factory])
 	init_jinja2(app, filters=dict(datetime=datetime_filter))
-	add_routes(app, 'handers')
+	add_routes(app, 'handlers')
 	add_static(app)
 	srv = await loop.create_server(app.make_handler(), srv_ip, srv_port)
 	logging.info('server started ad http://%s:%d...' % (srv_ip, srv_port))
