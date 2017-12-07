@@ -12,7 +12,6 @@ def log(sql, args=()):
 	logging.info('SQL: %s' % sql)
 
 
-
 async def create_pool(loop, **kw):
 	logging.info('create database connection pool...')
 	global __pool
@@ -30,7 +29,6 @@ async def create_pool(loop, **kw):
 		)
 
 
-
 async def select(sql, args, size=None):
 	log(sql, args)
 	global __pool
@@ -42,7 +40,7 @@ async def select(sql, args, size=None):
 				rs = await cur.fetchmany(size)
 			else:
 				rs = await cur.fetchall()
-		logging.info('rows returnd: %s' % len(rs))
+		logging.info('rows returned: %s' % len(rs))
 		return rs
 
 
