@@ -1,1 +1,4 @@
-my awesome-python3-webapp project.
+awesome-python3-webapp
+======================
+
+A python webapp tutorial.
